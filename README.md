@@ -108,6 +108,44 @@ class GameBoard extends JPanel implements ActionListener, KeyListener {
         timer = new Timer(200, this);
         timer.start();
     }
+    private void initGame() {
+        player = new Player(200, 200);
+        viruses = new ArrayList<>();
+        patches = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            viruses.add(new Virus(randCoord(), randCoord()));
+        }
+        for (int i = 0; i < 5; i++) {
+            patches.add(new Patch(randCoord(), randCoord()));
+        }
+    }
 
+    private int randCoord() {
+        return (new Random().nextInt(20)) * 20;
+    }
 
-
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (!gameOver) {
+            player.move();
+            for (Virus v : viruses) {
+                v.moveRandom();
+                if (player.getBounds().intersects(v.getBounds())) {
+                    gameOver = true;
+                }
+            }
+            patches.removeIf(patch -> {
+                if (player.getBounds().intersects(patch.getBounds())) {
+                    score++;
+                    return true;
+                }
+                return false;
+            });
+            if (patches.isEmpty()) {
+                for (int i = 0; i < 5; i++) {
+                    patches.add(new Patch(randCoord(), randCoord()));
+                }
+            }
+            repaint();
+        }
+    }
