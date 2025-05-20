@@ -55,5 +55,59 @@ class Player extends Entity {
         g.drawImage(image, x, y, size, size, null);
     }
 }
+class Virus extends Entity {
+    Random rand = new Random();
+    private static final String VIRUS_IMAGE_URL = "C:\\Users\\admin\\Downloads\\WhatsApp Image 2025-05-19 at 7.41.13 PM (1).jpeg";
+
+    public Virus(int x, int y) {
+        this.x = x;
+        this.y = y;
+        image = new ImageIcon(VIRUS_IMAGE_URL).getImage();
+    }
+
+    public void moveRandom() {
+        x += (rand.nextInt(3) - 1) * size;
+        y += (rand.nextInt(3) - 1) * size;
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        g.drawImage(image, x, y, size, size, null);
+    }
+}
+
+class Patch extends Entity {
+    private static final String PATCH_IMAGE_URL = "C:\\Users\\admin\\Downloads\\WhatsApp Image 2025-05-19 at 7.41.13 PM.jpeg";
+
+    public Patch(int x, int y) {
+        this.x = x;
+        this.y = y;
+        image = new ImageIcon(PATCH_IMAGE_URL).getImage();
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        g.drawImage(image, x, y, size, size, null);
+    }
+}
+
+class GameBoard extends JPanel implements ActionListener, KeyListener {
+    private Player player;
+    private ArrayList<Virus> viruses;
+    private ArrayList<Patch> patches;
+    private Timer timer;
+    private int score = 0;
+    private boolean gameOver = false;
+
+    public GameBoard() {
+        setPreferredSize(new Dimension(400, 400));
+        setBackground(Color.BLACK);
+        setFocusable(true);
+        addKeyListener(this);
+        initGame();
+        timer = new Timer(200, this);
+        timer.start();
+    }
+
 
 
